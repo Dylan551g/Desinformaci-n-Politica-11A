@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>¿Es esta fuente confiable? (Desinformacion politica)</title>
+  <title>Es esta fuente confiable</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -82,58 +82,49 @@
 </head>
 <body>
   <div class="container">
-    <h1>¿Es esta fuente confiable?<br>(Desinformacion politica)</h1>
+    <h1>Es esta fuente confiable</h1>
     <div class="source-box" id="fuenteActual">
       <div id="textoFuente">Cargando...</div>
       <div class="fuente" id="fuenteLink"></div>
     </div>
 
-    <!-- Formulario que envia respuesta a FormSubmit -->
-    <form id="formulario" action="https://formsubmit.co/dylansgomez12@gmail.com" method="POST">
-      <!-- Campo oculto para que no muestre pagina de confirmacion -->
-      <input type="hidden" name="_captcha" value="false" />
-      <!-- Campo oculto para redirigir despues de enviar -->
-      <input type="hidden" name="_next" value="https://tuusuario.github.io/desinformacion-politica/gracias.html" />
-      
-      <input type="hidden" id="textoFuenteInput" name="Fuente evaluada" value="" />
-      
-      <button type="button" class="btn-confiable" onclick="enviarRespuesta(true)">Confiable</button>
-      <button type="button" class="btn-no-confiable" onclick="enviarRespuesta(false)">No confiable</button>
-    </form>
+    <button class="btn-confiable" onclick="evaluarFuente(true)">Confiable</button>
+    <button class="btn-no-confiable" onclick="evaluarFuente(false)">No confiable</button>
+
     <div class="respuesta" id="resultado"></div>
   </div>
 
   <script>
     const fuentes = [
       {
-        texto: "Un meme afirma que un candidato prohibira la educacion publica si gana las elecciones.",
+        texto: "Un meme dice que un candidato quitara la educacion publica si gana.",
         fuente: "Cadena de WhatsApp",
         confiable: false,
-        explicacion: "No es confiable: no hay evidencia ni fuentes verificadas."
+        explicacion: "No es confiable: no hay pruebas ni fuentes reales."
       },
       {
-        texto: "El Ministerio del Interior publica que habra cambios en los requisitos para votar.",
+        texto: "El Ministerio del Interior publico cambios para votar.",
         fuente: "mininterior.gov.co",
         confiable: true,
-        explicacion: "Si es confiable: fuente oficial del gobierno."
+        explicacion: "Si es confiable: es un sitio oficial del gobierno."
       },
       {
-        texto: "Una cuenta anonima en redes asegura que las elecciones fueron manipuladas por una potencia extranjera.",
+        texto: "Una cuenta anonima dice que otro pais controlo las elecciones.",
         fuente: "@noticiaslibresanonimo",
         confiable: false,
-        explicacion: "No es confiable: fuente no verificada ni respaldada."
+        explicacion: "No es confiable: no hay verificacion ni evidencia."
       },
       {
-        texto: "El portal de noticias La Silla Vacia publica un informe sobre la financiacion de campanas politicas.",
+        texto: "Un portal serio publico un informe sobre las campañas politicas.",
         fuente: "lasillavacia.com",
         confiable: true,
-        explicacion: "Si es confiable: medio reconocido con periodismo investigativo."
+        explicacion: "Si es confiable: medio conocido y profesional."
       },
       {
-        texto: "Una imagen editada muestra una supuesta declaracion extrema de un candidato, pero no hay video ni fuente.",
+        texto: "Una imagen editada muestra una frase de un candidato sin prueba.",
         fuente: "Publicacion en Facebook",
         confiable: false,
-        explicacion: "No es confiable: imagen manipulada sin contexto ni prueba."
+        explicacion: "No es confiable: imagen manipulada sin contexto."
       }
     ];
 
@@ -145,27 +136,18 @@
       document.getElementById("fuenteLink").innerText = "Fuente: " + actual.fuente;
     }
 
-    function enviarRespuesta(opcionUsuario) {
+    function evaluarFuente(eleccionUsuario) {
       const actual = fuentes[indice];
       const resultado = document.getElementById("resultado");
-      
-      // Guarda la fuente evaluada en el input oculto para enviar por formulario
-      document.getElementById("textoFuenteInput").value = `${actual.texto} - Respuesta del usuario: ${opcionUsuario ? "Confiable" : "No confiable"}`;
 
-      if (opcionUsuario === actual.confiable) {
-        resultado.innerHTML = "? ¡Correcto! " + actual.explicacion;
+      if (eleccionUsuario === actual.confiable) {
+        resultado.innerHTML = "? Correcto. " + actual.explicacion;
       } else {
         resultado.innerHTML = "? Incorrecto. " + actual.explicacion;
       }
 
-      // Envia el formulario despues de mostrar la respuesta
       setTimeout(() => {
-        document.getElementById("formulario").submit();
-      }, 2000);
-
-      // Cambia a la siguiente fuente para mostrar cuando vuelva la pagina
-      indice = (indice + 1) % fuentes.length;
-      setTimeout(() => {
+        indice = (indice + 1) % fuentes.length;
         resultado.innerHTML = "";
         mostrarFuente();
       }, 4000);
@@ -175,3 +157,4 @@
   </script>
 </body>
 </html>
+
