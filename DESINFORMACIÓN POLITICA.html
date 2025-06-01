@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>¿Es esta fuente confiable? (Desinformacion politica)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      max-width: 700px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .source-box {
+      background-color: white;
+      color: black;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .fuente {
+      font-style: italic;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      margin: 0.5rem;
+      border: none;
+      border-radius: 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-confiable {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .btn-no-confiable {
+      background-color: #f44336;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .respuesta {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>¿Es esta fuente confiable?<br>(Desinformacion politica)</h1>
+    <div class="source-box" id="fuenteActual">
+      <div id="textoFuente">Cargando...</div>
+      <div class="fuente" id="fuenteLink"></div>
+    </div>
+    <button class="btn-confiable" onclick="evaluarFuente(true)">Confiable</button>
+    <button class="btn-no-confiable" onclick="evaluarFuente(false)">No confiable</button>
+    <div class="respuesta" id="resultado"></div>
+  </div>
+
+  <script>
+    const fuentes = [
+      {
+        texto: "Un meme afirma que un candidato prohibira la educacion publica si gana las elecciones.",
+        fuente: "Cadena de WhatsApp",
+        confiable: false,
+        explicacion: "No es confiable: no hay evidencia ni fuentes verificadas."
+      },
+      {
+        texto: "El Ministerio del Interior publica que habra cambios en los requisitos para votar.",
+        fuente: "mininterior.gov.co",
+        confiable: true,
+        explicacion: "Si es confiable: fuente oficial del gobierno."
+      },
+      {
+        texto: "Una cuenta anonima en redes asegura que las elecciones fueron manipuladas por una potencia extranjera.",
+        fuente: "@noticiaslibresanonimo",
+        confiable: false,
+        explicacion: "No es confiable: fuente no verificada ni respaldada."
+      },
+      {
+        texto: "El portal de noticias La Silla Vacia publica un informe sobre la financiacion de campanas politicas.",
+        fuente: "lasillavacia.com",
+        confiable: true,
+        explicacion: "Si es confiable: medio reconocido con periodismo investigativo."
+      },
+      {
+        texto: "Una imagen editada muestra una supuesta declaracion extrema de un candidato, pero no hay video ni fuente.",
+        fuente: "Publicacion en Facebook",
+        confiable: false,
+        explicacion: "No es confiable: imagen manipulada sin contexto ni prueba."
+      },
+      {
+        texto: "El Instituto Nacional de Estadistica publica el informe oficial sobre las cifras de empleo.",
+        fuente: "ine.gov",
+        confiable: true,
+        explicacion: "Si es confiable: fuente oficial de estadisticas."
+      },
+      {
+        texto: "Un video viral asegura que tomar agua de limon cura todas las enfermedades.",
+        fuente: "Cuenta viral sin respaldo medico",
+        confiable: false,
+        explicacion: "No es confiable: carece de evidencia cientifica."
+      },
+      {
+        texto: "El portal oficial del Ministerio de Salud informa sobre las nuevas medidas sanitarias.",
+        fuente: "minsalud.gov",
+        confiable: true,
+        explicacion: "Si es confiable: informacion oficial del gobierno."
+      },
+      {
+        texto: "Una pagina no verificada afirma que la vacuna contra el COVID-19 es peligrosa y causa infertilidad.",
+        fuente: "blog desconocido",
+        confiable: false,
+        explicacion: "No es confiable: informacion falsa desmentida por expertos."
+      },
+      {
+        texto: "El diario El Tiempo publica una nota sobre los resultados de las elecciones presidenciales.",
+        fuente: "eltiempo.com",
+        confiable: true,
+        explicacion: "Si es confiable: medio tradicional con periodistas profesionales."
+      }
+    ];
+
+    let indice = 0;
+
+    function mostrarFuente() {
+      const actual = fuentes[indice];
+      document.getElementById("textoFuente").innerText = actual.texto;
+      document.getElementById("fuenteLink").innerText = "Fuente: " + actual.fuente;
+    }
+
+    function evaluarFuente(eleccionUsuario) {
+      const actual = fuentes[indice];
+      const resultado = document.getElementById("resultado");
+
+      if (eleccionUsuario === actual.confiable) {
+        resultado.innerHTML = "? ¡Correcto! " + actual.explicacion;
+      } else {
+        resultado.innerHTML = "? Incorrecto. " + actual.explicacion;
+      }
+
+      setTimeout(() => {
+        indice = (indice + 1) % fuentes.length;
+        resultado.innerHTML = "";
+        mostrarFuente();
+      }, 4000);
+    }
+
+    mostrarFuente();
+  </script>
+</body>
+</html>
