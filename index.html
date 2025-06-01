@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>¿Es esta fuente confiable? (Desinformacion politica)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      max-width: 700px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .source-box {
+      background-color: white;
+      color: black;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .fuente {
+      font-style: italic;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      margin: 0.5rem;
+      border: none;
+      border-radius: 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-confiable {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .btn-no-confiable {
+      background-color: #f44336;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .respuesta {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>¿Es esta fuente confiable?<br>(Desinformacion politica)</h1>
+    <div class="source-box" id="fuenteActual">
+      <div id="textoFuente">Cargando...</div>
+      <div class="fuente" id="fuenteLink"></div>
+    </div>
+
+    <!-- Formulario que envia respuesta a FormSubmit -->
+    <form id="formulario" action="https://formsubmit.co/dylansgomez12@gmail.com" method="POST">
+      <!-- Campo oculto para que no muestre pagina de confirmacion -->
+      <input type="hidden" name="_captcha" value="false" />
+      <!-- Campo oculto para redirigir despues de enviar -->
+      <input type="hidden" name="_next" value="https://tuusuario.github.io/desinformacion-politica/gracias.html" />
+      
+      <input type="hidden" id="textoFuenteInput" name="Fuente evaluada" value="" />
+      
+      <button type="button" class="btn-confiable" onclick="enviarRespuesta(true)">Confiable</button>
+      <button type="button" class="btn-no-confiable" onclick="enviarRespuesta(false)">No confiable</button>
+    </form>
+    <div class="respuesta" id="resultado"></div>
+  </div>
+
+  <script>
+    const fuentes = [
+      {
+        texto: "Un meme afirma que un candidato prohibira la educacion publica si gana las elecciones.",
+        fuente: "Cadena de WhatsApp",
+        confiable: false,
+        explicacion: "No es confiable: no hay evidencia ni fuentes verificadas."
+      },
+      {
+        texto: "El Ministerio del Interior publica que habra cambios en los requisitos para votar.",
+        fuente: "mininterior.gov.co",
+        confiable: true,
+        explicacion: "Si es confiable: fuente oficial del gobierno."
+      },
+      {
+        texto: "Una cuenta anonima en redes asegura que las elecciones fueron manipuladas por una potencia extranjera.",
+        fuente: "@noticiaslibresanonimo",
+        confiable: false,
+        explicacion: "No es confiable: fuente no verificada ni respaldada."
+      },
+      {
+        texto: "El portal de noticias La Silla Vacia publica un informe sobre la financiacion de campanas politicas.",
+        fuente: "lasillavacia.com",
+        confiable: true,
+        explicacion: "Si es confiable: medio reconocido con periodismo investigativo."
+      },
+      {
+        texto: "Una imagen editada muestra una supuesta declaracion extrema de un candidato, pero no hay video ni fuente.",
+        fuente: "Publicacion en Facebook",
+        confiable: false,
+        explicacion: "No es confiable: imagen manipulada sin contexto ni prueba."
+      }
+    ];
+
+    let indice = 0;
+
+    function mostrarFuente() {
+      const actual = fuentes[indice];
+      document.getElementById("textoFuente").innerText = actual.texto;
+      document.getElementById("fuenteLink").innerText = "Fuente: " + actual.fuente;
+    }
+
+    function enviarRespuesta(opcionUsuario) {
+      const actual = fuentes[indice];
+      const resultado = document.getElementById("resultado");
+      
+      // Guarda la fuente evaluada en el input oculto para enviar por formulario
+      document.getElementById("textoFuenteInput").value = `${actual.texto} - Respuesta del usuario: ${opcionUsuario ? "Confiable" : "No confiable"}`;
+
+      if (opcionUsuario === actual.confiable) {
+        resultado.innerHTML = "? ¡Correcto! " + actual.explicacion;
+      } else {
+        resultado.innerHTML = "? Incorrecto. " + actual.explicacion;
+      }
+
+      // Envia el formulario despues de mostrar la respuesta
+      setTimeout(() => {
+        document.getElementById("formulario").submit();
+      }, 2000);
+
+      // Cambia a la siguiente fuente para mostrar cuando vuelva la pagina
+      indice = (indice + 1) % fuentes.length;
+      setTimeout(() => {
+        resultado.innerHTML = "";
+        mostrarFuente();
+      }, 4000);
+    }
+
+    mostrarFuente();
+  </script>
+</body>
+</html>
